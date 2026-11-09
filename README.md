@@ -4,7 +4,7 @@ Prototype smart room menggunakan esp32 dengan protokol MQTT sebagai main dan HTT
 
 ## Pemenuhan syarat
 
-| Persyaratan | Implementasi / Bukti |
+| Persyaratan | Pengerjaan |
 |---|---|
 | **Level 1: Hardware** | |
 | Skematik rangkaian | ada di [config.h](firmware/smartroom/config.h). Gambar [Schematic.png](Schematic.png) |
@@ -92,12 +92,12 @@ hardware-test/           uji sensor
 
 | Perangkat | Pin ESP32 |
 |---|---|
-| DHT22 / DHT11 data | GPIO4 Jenis sensor 22 atau 11 |
+| DHT22 / DHT11 | GPIO4, Jenis sensor 22 atau 11 |
 | LDR | GPIO34 |
 | PIR output | GPIO27 |
 | LED | GPIO25 / GPIO26 |
 | Buzzer | GPIO33 |
-| Push button | GPIO14 ke GND |
+| Push button | GPIO14 dan GND |
 | OLED SDA / SCL | GPIO21 / GPIO22, 0x3C |
 
 ## Pengujian
@@ -118,9 +118,11 @@ hardware-test/           uji sensor
    | `MQTT_PASSWORD` | Sandi akun itu. Kosong untuk broker publik. |
    | `HTTP_URL` | Biarkan `https://smart.adhiteknologi.com`. Cadangan HTTP memakai akun MQTT di atas |
 
-4. Upload `firmware/smartroom/smartroom.ino`, lalu buka Serial Monitor 115200.
+4. **Upload** `firmware/smartroom/smartroom.ino`, lalu buka Serial Monitor 115200.
 
 5. **Data Realtime**: Buka smart.adhiteknologi.com, pada halaman utama menampilkan tabel data yang dikirim perangkat. Untuk mengakses pengaturan diperlukan login. Tampilan halaman utama [Utama.png](Utama.png) dan halaman pengaturan [Pengaturan.png](Pengaturan.png).
+
+6. **OTA**: Naikkan versi pada config.h dan export compiled binary. upload file bin pada halaman config smart.adhiteknologi.com, proses download akan terlihat pada OLED. 
 
 ## Ketentuan 
 
@@ -129,3 +131,5 @@ hardware-test/           uji sensor
 - Alarm mati bila suhu turun ke *ambang − 0,5 °C* tanpa ditekan.
 - PIR diberikan waktu untuk stabil 30 detik pertama setelah aktif. OLED menampilkan `Gerak : Loading`.
 - Pojok kanan atas OLED menunjukkan protokol: `MQTT`, `HTTP` (MQTT putus 5 detik atau lebih).
+
+## Pengembangan selanjutnya ada pada data lokasi dan protokol yang sedang berjalan
