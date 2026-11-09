@@ -7,10 +7,11 @@ Prototype smart room menggunakan esp32 dengan protokol MQTT sebagai main dan HTT
 | Persyaratan | Implementasi / Bukti |
 |---|---|
 | **Level 1: Hardware** | |
-| Skematik rangkaian | ada di [config.h](firmware/smartroom/config.h). Gambar `Schematic.png` |
+| Skematik rangkaian | ada di [config.h](firmware/smartroom/config.h). Gambar [Schematic.png](Schematic.png) |
+| Design PCB | Top-Layer [PCB-TopLayer.png](PCB-TopLayer.png). Bottom-Layer [PCB-BottomLayer.png](PCB-BottomLayer.png) |
 | Uji perangkat | ada di [hardware-test/](hardware-test/): LED dan buzzer, button, DHT, LDR, PIR, serta OLED |
 | Foto prototype | Foto rangkaian breadboard `Prototype-SmartRoom.jpeg` |
-| Video pengujian | url |
+| Video pengujian | [https://youtu.be/M9Wnl7IGAFw?si=bWgMDrhiYPDpfMWm](https://youtu.be/M9Wnl7IGAFw?si=bWgMDrhiYPDpfMWm) |
 | **Level 2: Firmware** | |
 | Pembacaan sensor | menggunakan `millis()` di [interval.h](firmware/smartroom/src/interval.h). [sensors.cpp](firmware/smartroom/src/hardware/sensors.cpp) DHT setiap 5 detik, LDR setiap 1 detik, dan PIR `loop()`. |
 | Alarm dan button | [alarm_logic.h](firmware/smartroom/src/hardware/alarm_logic.h) mengatur keadaan normal, aktif, dan acknowledged. [alarm.cpp](firmware/smartroom/src/hardware/alarm.cpp) mengendalikan LED, buzzer, dan button |
@@ -25,8 +26,7 @@ Prototype smart room menggunakan esp32 dengan protokol MQTT sebagai main dan HTT
 | Status dan Last Will | [mqtt.cpp](firmware/smartroom/src/network/mqtt.cpp) mengatur status retained `online` dan Last Will `offline` pada `smartroom/<device_id>/status`. Bukti penerimaan kedua status oleh subscriber perlu dilampirkan. |
 | Broker | Broker implementasi: `wss://iot.adhiteknologi.com:443/mqtt`. Bukti pengujian dengan broker publik port 1883, sesuai soal, belum dilampirkan. |
 | **Tambahan opsional** | |
-| Desain PCB | Gambar Top Layer `PCB-TopLayer.png` dan Bottom Layer `PCB-BottomLayer.png` belum dilampirkan. Bukti rangkaian breadboard tetap diperlukan untuk Level 1. |
-| Cadangan HTTP | [http_backup.cpp](firmware/smartroom/src/network/http_backup.cpp) mengirim telemetri ke `POST https://smart.adhiteknologi.com/api/devices/<device_id>/telemetry` ketika MQTT terputus setidaknya 5 detik, Wi-Fi terhubung, dan akun cadangan HTTP dikonfigurasi. |
+| Cadangan HTTP | [http_backup.cpp](firmware/smartroom/src/network/http_backup.cpp) mengirim telemetri ke `POST https://smart.adhiteknologi.com/api/devices/<device_id>/telemetry` ketika MQTT disconnect 5 detik.
 
 ### Contoh telemetri
 
