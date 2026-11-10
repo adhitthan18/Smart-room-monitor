@@ -10,27 +10,27 @@ Prototype smart room menggunakan esp32 dengan protokol MQTT sebagai main dan HTT
 | Skematik rangkaian | ada di [config.h](firmware/smartroom/config.h). Gambar [Schematic.png](Schematic.png) |
 | Design PCB | Top-Layer [PCB-TopLayer.png](PCB-TopLayer.png). Bottom-Layer [PCB-BottomLayer.png](PCB-BottomLayer.png) |
 | Uji perangkat | ada di [hardware-test/](hardware-test/): LED dan buzzer, button, DHT, LDR, PIR, serta OLED |
-| Foto prototype | Foto rangkaian breadboard `Prototype-SmartRoom.jpeg` |
+| Foto prototype | Foto rangkaian prototype yang dikerjakan [Prototype-SmartRoom.jpeg](Prototype-SmartRoom.jpeg) |
 | Video pengujian | [https://youtu.be/M9Wnl7IGAFw?si=bWgMDrhiYPDpfMWm](https://youtu.be/M9Wnl7IGAFw?si=bWgMDrhiYPDpfMWm) |
 | **Level 2: Firmware** | |
 | Pembacaan sensor | menggunakan `millis()` di [interval.h](firmware/smartroom/src/interval.h). [sensors.cpp](firmware/smartroom/src/hardware/sensors.cpp) DHT setiap 5 detik, LDR setiap 1 detik, dan PIR `loop()`. |
 | Alarm dan button | [alarm_logic.h](firmware/smartroom/src/hardware/alarm_logic.h) mengatur keadaan normal, aktif, dan acknowledged. [alarm.cpp](firmware/smartroom/src/hardware/alarm.cpp) mengendalikan LED, buzzer, dan button |
 | OLED | [display.cpp](firmware/smartroom/src/hardware/display.cpp) menampilkan suhu, kelembapan, cahaya, gerakan, ambang, jalur data, dan status alarm |
-| Jika sensor tidak terbaca | DHT gagal dan dikirim sebagai `null` pada telemetri; keadaan alarm dipertahankan. OLED yang tidak terdeteksi dilewati, dan komunikasi I2C diberi timeout 50 ms |
+| Jika sensor tidak terbaca | maka data DHT menjadi `null` pada telemetri, keadaan alarm tetap, OLED yang tidak terdeteksi akan diabaikan, dan komunikasi I2C diberi timeout 50 ms |
 | Kode | dipisahkan dalam [hardware/](firmware/smartroom/src/hardware/), [network/](firmware/smartroom/src/network/), dan [data/](firmware/smartroom/src/data/). [smartroom.ino](firmware/smartroom/smartroom.ino) mengatur inisialisasi |
 | **Level 3: MQTT** | |
 | WiFi reconnect otomatis | [wifi_link.cpp](firmware/smartroom/src/network/wifi_link.cpp) mengatur koneksi dan penyambungan ulang WiFi. |
 | Kredensial di luar repository | Kredensial disimpan di `firmware/smartroom/secrets.h` |
 | Telemetri JSON setiap 5 detik | [mqtt.cpp](firmware/smartroom/src/network/mqtt.cpp) mengirim ke `smartroom/<device_id>/telemetry`. `device_id` menggunakan MAC ESP32. Contoh telemetri dicantumkan di bawah. |
 | Perintah ubah ambang | Perangkat menerima perintah pada `smartroom/<device_id>/command`. [payload.cpp](firmware/smartroom/src/data/payload.cpp) memvalidasi nilai ambang sebelum diterapkan. |
-| Status dan Last Will | [mqtt.cpp](firmware/smartroom/src/network/mqtt.cpp) mengatur status retained `online` dan Last Will `offline` pada `smartroom/<device_id>/status`. Bukti penerimaan kedua status oleh subscriber perlu dilampirkan. |
-| Broker | Broker implementasi: `wss://iot.adhiteknologi.com:443/mqtt`. Bukti pengujian dengan broker publik port 1883, sesuai soal, belum dilampirkan. |
+| Status dan Last Will | [mqtt.cpp](firmware/smartroom/src/network/mqtt.cpp) mengatur status retained `online` dan Last Will `offline` pada `smartroom/<device_id>/status` |
+| Broker | Broker implementasi: `wss://iot.adhiteknologi.com:443/mqtt` |
 | **Tambahan opsional** | |
-| Cadangan HTTP | [http_backup.cpp](firmware/smartroom/src/network/http_backup.cpp) mengirim telemetri ke `POST https://smart.adhiteknologi.com/api/devices/<device_id>/telemetry` ketika MQTT disconnect 5 detik.
+| Cadangan HTTP | [http_backup.cpp](firmware/smartroom/src/network/http_backup.cpp) mengirim telemetri ke `POST https://smart.adhiteknologi.com/api/devices/<device_id>/telemetry` ketika MQTT disconnect 5 detik
 
 ### Contoh telemetri
 
-Contoh berikut berasal dari log Serial Monitor. Lampirkan juga hasil penerimaan subscriber MQTT untuk membuktikan pesan sampai ke broker, serta beberapa pesan berurutan untuk menunjukkan interval 5 detik.
+Contoh berikut dari log Serial Monitor.
 
 ```json
 {
@@ -59,11 +59,11 @@ contoh payload.
 
 ### Konfigurasi yang perlu disesuaikan
 
-Sebelum mengambil bukti pengujian, sesuaikan [config.h](firmware/smartroom/config.h) dengan komponen dan pin:
+Sebelum melakukan pengujian, sesuaikan [config.h](firmware/smartroom/config.h) dengan komponen dan pin:
 
 - `DHT_TYPE` saat ini `11`, gunakan `22` untuk sensor DHT22
 - `DEFAULT_THRESHOLD_C` saat ini `35.0f`, Ambang yang sudah tersimpan di NVS tidak terhapus setelah restart.
-- `BUZZER_ACTIVE_HIGH` saat ini `false`, Jika memakai modul buzzer aktif-LOW gunakan `true`
+- `BUZZER_ACTIVE_HIGH` saat ini `false`, Jika memakai modul buzzer aktif LOW gunakan `true`
 
 ## Struktur
 
