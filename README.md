@@ -112,11 +112,11 @@ hardware-test/           uji sensor
 
    | Kolom | Isi |
    |---|---|
-   | `WIFI_SSID`, `WIFI_PASSWORD` | Wi-Fi. |
-   | `MQTT_URL` | `wss://iot.adhiteknologi.com:443/mqtt`, atau broker publik `mqtt://broker.emqx.io:1883` |
-   | `MQTT_USERNAME` | Akun perangkat dari broker.adhiteknologi.com (Akun layanan), mis. `sr-aabbccddeeff`. Kosong + `MQTT_PASSWORD` diisi = login perangkat iot.adhiteknologi (username MAC, tanpa cadangan HTTP). |
-   | `MQTT_PASSWORD` | Sandi akun itu. Kosong untuk broker publik. |
-   | `HTTP_URL` | Biarkan `https://smart.adhiteknologi.com`. Cadangan HTTP memakai akun MQTT di atas |
+   | `WIFI_SSID`, `WIFI_PASSWORD` | WiFi. |
+   | `MQTT_URL` | `wss://iot.adhiteknologi.com:443/mqtt`, atau broker lain `mqtt://broker.emqx.io:1883` |
+   | `MQTT_USERNAME` | Akun dibuat dari broker.adhiteknologi.com |
+   | `MQTT_PASSWORD` | Password akun |
+   | `HTTP_URL` | Biarkan `https://smart.adhiteknologi.com` |
 
 4. **Upload** `firmware/smartroom/smartroom.ino`, lalu buka Serial Monitor 115200.
 
